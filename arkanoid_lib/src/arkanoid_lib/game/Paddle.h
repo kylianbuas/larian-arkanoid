@@ -38,8 +38,5 @@ namespace arkanoid::game
 
 		bool m_bIsMoving = false;
 		float m_fMovementSpeed = 1.f;
-		float m_fAcceleration = 4.0f;
-		float m_fDeceleration = 4.0f;
-		float m_fVelocityX = 0.0f;
 	};
 }
