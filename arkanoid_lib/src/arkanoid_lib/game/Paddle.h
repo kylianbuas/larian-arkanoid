@@ -2,6 +2,7 @@
 
 #include <SDL3/SDL_rect.h>
 
+#include "arkanoid_lib/game/GameObject.h"
 #include "arkanoid_lib/game/IBounceable.h"
 
 struct SDL_Renderer;
@@ -13,10 +14,11 @@ namespace arkanoid::resources
 }
 namespace arkanoid::game
 {
-	class Paddle : public IBounceable
+	class Paddle : public GameObject, public IBounceable
 	{
 	public:
 		Paddle();
+		virtual ~Paddle() = default;
 
 		void LoadTextures(resources::ResourceSystem& a_ResourceSystem);
 		void Reset();
@@ -32,9 +34,6 @@ namespace arkanoid::game
 
 		float m_fPaddleWidth = 0;
 		float m_fPaddleHeight = 0;
-
-		float m_fPosX = 0.5f;
-		float m_fPosY = 0;
 
 		bool m_bIsMoving = false;
 		float m_fMovementSpeed = 1.f;

@@ -13,17 +13,17 @@ set_target_properties(arkanoid_level_editor PROPERTIES
 target_include_directories(arkanoid_level_editor PUBLIC 
 	${CMAKE_CURRENT_LIST_DIR}/src
 	${CMAKE_SOURCE_DIR}/arkanoid_level_editor/src
-	${CMAKE_SOURCE_DIR}/external/imgui # for imgui backend include
 	${CMAKE_SOURCE_DIR}/external
 )
 
-target_link_libraries(arkanoid_level_editor PRIVATE arkanoid_lib SDL3 SDL3_image imgui)
+target_link_libraries(arkanoid_level_editor PRIVATE arkanoid_lib SDL3 SDL3_image SDL3_ttf ole32 uuid shell32)
 
 target_link_directories(arkanoid_level_editor PRIVATE "${CMAKE_CURRENT_LIST_DIR}/../$<CONFIG>")
 
 target_link_directories(arkanoid_level_editor PRIVATE
     "${CMAKE_SOURCE_DIR}/external/SDL3/lib/"
     "${CMAKE_SOURCE_DIR}/external/SDL3_image/lib/"
+    "${CMAKE_SOURCE_DIR}/external/SDL3_ttf/lib/"
 )
 
 add_custom_command(TARGET arkanoid_level_editor POST_BUILD
@@ -35,6 +35,12 @@ add_custom_command(TARGET arkanoid_level_editor POST_BUILD
 add_custom_command(TARGET arkanoid_level_editor POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E copy_if_different
         "${CMAKE_SOURCE_DIR}/external/SDL3_image/lib/SDL3_image.dll"
+        "$<TARGET_FILE_DIR:arkanoid_level_editor>"
+)
+
+add_custom_command(TARGET arkanoid_level_editor POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy_if_different
+        "${CMAKE_SOURCE_DIR}/external/SDL3_ttf/lib/SDL3_ttf.dll"
         "$<TARGET_FILE_DIR:arkanoid_level_editor>"
 )
 

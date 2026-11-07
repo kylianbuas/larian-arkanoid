@@ -44,6 +44,7 @@ int main(int a_iNumArgs, char* a_aArgs[])
 	}
 
 	GAME = std::make_unique<game::Game>(*window, *renderer);
+	GAME->Initialize();
 	GAME->LoadTextures();
 	GAME->LoadSounds();
 
@@ -63,7 +64,7 @@ int main(int a_iNumArgs, char* a_aArgs[])
 	SDL_SetWindowAspectRatio(window, resolution, resolution);
 
 	GAME->GetLevelManager().SetLevels({
-		"1.lvl",
+		//"1.lvl",
 		"2.lvl",
 		"3.lvl",
 		"4.lvl",
@@ -71,7 +72,7 @@ int main(int a_iNumArgs, char* a_aArgs[])
 		"6.lvl",
 		"7.lvl",
 	});
-	GAME->Initialize();
+	GAME->Start();
 
 	bool running = true;
 	Uint64 previousTime = SDL_GetPerformanceCounter();
@@ -94,6 +95,12 @@ int main(int a_iNumArgs, char* a_aArgs[])
 			static_cast<double>(SDL_GetPerformanceFrequency()));
 
 		previousTime = currentTime;
+
+		constexpr float MAX_DELTA_TIME = 1.0f / 60.0f;
+		if (deltaTime > MAX_DELTA_TIME)
+		{
+			deltaTime = MAX_DELTA_TIME;
+		}
 
 		GAME->Update(deltaTime);
 

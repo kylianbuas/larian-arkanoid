@@ -3,7 +3,6 @@
 #include <vector>
 
 #include "arkanoid_lib/game/Ball.h"
-#include "arkanoid_lib/game/IBounceable.h"
 #include "arkanoid_lib/game/Paddle.h"
 #include "arkanoid_lib/level/Level.h"
 
@@ -15,12 +14,15 @@ namespace arkanoid::resources
 }
 namespace arkanoid::game
 {
+	class IBounceable;
+	class IConsumeable;
+
 	class World
 	{
 	public:
+		void Initialize();
 		void LoadTextures(resources::ResourceSystem& a_ResourceSystem);
 		void LoadSounds(resources::ResourceSystem& a_ResourceSystem);
-		void Initialize();
 
 		void ResetWorld();
 
@@ -39,12 +41,30 @@ namespace arkanoid::game
 		void AddBounceable(IBounceable& a_Bounceable);
 		void RemoveBounceable(IBounceable& a_Bounceable);
 
+		void AddConsumeable(IConsumeable& a_Consumeable);
+		void RemoveConsumeable(IConsumeable& a_Consumeable);
+
 		const std::vector<IBounceable*>& GetBounceables() const;
 		std::vector<IBounceable*>& GetBounceables();
+
+		const std::vector<IConsumeable*>& GetConsumeables() const;
+		std::vector<IConsumeable*>& GetConsumeables();
+
+		template<typename T, typename... Args>
+		void SpawnGameObject(Args&&... a_Args)
+		{
+			m_aGameObjects.emplace_back(
+				std::make_unique<T>(std::forward<Args>(a_Args)...)
+			);
+		}
 	private:
-		level::Level m_Level; // Stores the bricks and other static world objects.
-		game::Ball m_Ball;
-		game::Paddle m_Paddle;
+		std::unique_ptr<level::Level> m_pLevel; // Stores the bricks and other static world objects.
+		std::unique_ptr<game::Ball> m_pBall; // Separate from game objects.
+		std::unique_ptr<game::Paddle> m_pPaddle; // Separate from game objects.
+
 		std::vector<IBounceable*> m_aBounceables; // Non-owning.
+		std::vector<IConsumeable*> m_aConsumeables; // Non-owning.
+
+		std::vector<std::unique_ptr<GameObject>> m_aGameObjects; // Owns the objects.
 	};
 }

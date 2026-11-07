@@ -23,12 +23,14 @@ namespace arkanoid::game
 	void Game::Initialize()
 	{
 		m_World.Initialize();
+	}
+
+	void Game::Start()
+	{
 		m_LevelManager.LoadLevel(0, m_World.GetLevel());
 		ResetLives();
 	}
 
-	constexpr float DUMMY_DEFAULT_WIDTH = 16;
-	constexpr float DUMMY_DEFAULT_HEIGHT = 8;
 	void Game::LoadTextures()
 	{
 		m_ResourceSystem.LoadTexture(resources::ETextureType::DUMMY, "tex_dummy.png"); // Used for measuring the bricks.
@@ -51,6 +53,7 @@ namespace arkanoid::game
 		m_ResourceSystem.LoadTexture(resources::ETextureType::PADDLE, "tex_paddle.png");
 		m_ResourceSystem.LoadTexture(resources::ETextureType::BALL, "tex_ball.png");
 		m_ResourceSystem.LoadTexture(resources::ETextureType::EXPLOSION, "tex_explosion.png");
+		m_ResourceSystem.LoadTexture(resources::ETextureType::POWER_UP, "tex_powerups.png");
 
 		m_World.LoadTextures(m_ResourceSystem);
 	}
@@ -62,10 +65,12 @@ namespace arkanoid::game
 		m_ResourceSystem.LoadSound(resources::ESoundType::LEVEL_COMPLETE, "snd_level_complete.wav");
 		m_ResourceSystem.LoadSound(resources::ESoundType::LIFE_LOST, "snd_life_lost.wav");
 		m_ResourceSystem.LoadSound(resources::ESoundType::GAME_OVER, "snd_game_over.wav");
+		m_ResourceSystem.LoadSound(resources::ESoundType::ADD_LIFE, "snd_add_life.wav");
 
 		m_pLevelCompleteSound = m_ResourceSystem.GetSound(resources::ESoundType::LEVEL_COMPLETE);
 		m_pLifeLostSound = m_ResourceSystem.GetSound(resources::ESoundType::LIFE_LOST);
 		m_pGameOverSound = m_ResourceSystem.GetSound(resources::ESoundType::GAME_OVER);
+		m_pAddLifeSound = m_ResourceSystem.GetSound(resources::ESoundType::ADD_LIFE);
 
 		m_World.LoadSounds(m_ResourceSystem);
 	}
@@ -220,6 +225,19 @@ namespace arkanoid::game
 		else if (m_pLifeLostSound)
 		{
 			m_AudioSystem.Play(*m_pLifeLostSound);
+		}
+	}
+
+	void Game::AddLife()
+	{
+		if (m_iLives < 99)
+		{
+			m_iLives++;
+
+			if (m_pAddLifeSound)
+			{
+				m_AudioSystem.Play(*m_pAddLifeSound);
+			}
 		}
 	}
 }

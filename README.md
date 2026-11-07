@@ -1,6 +1,6 @@
 # Breakout
 
-A small Arkanoid/Breakout clone written in C++20 with SDL3 with a level editor built with ImGui.
+A small Arkanoid/Breakout clone written in C++20 with SDL3, with a keyboard-driven level editor rendered by SDL.
 
 The game and the level editor share the same engine library (`arkanoid_lib`), so levels created in the editor can be dropped straight into the game.
 
@@ -11,6 +11,15 @@ The game and the level editor share the same engine library (`arkanoid_lib`), so
 - Three lives, sounds, animations and UI
 - Data-driven assets: textures, sounds, font, and levels are loaded from `assets/` at runtime
 - Level editor with a 12×18 grid, brick palette, and native open/save dialogs
+
+## Level editor controls
+
+- Arrow keys move the cursor
+- `Enter` places the selected brick
+- `[` / `]` (or `,` / `.`) cycle through brick types
+- `0`-`9` select a brick type directly
+- `E` selects the eraser and clears the tile under the cursor
+- `N` clears the level, `S` saves, `L` loads, `Esc` quits
 
 ## Building
 
@@ -36,4 +45,3 @@ Build either configuration (`Debug` or `Release`). The build copies the SDL DLLs
 - [SDL3](https://github.com/libsdl-org/SDL)
 - [SDL3_image](https://github.com/libsdl-org/SDL_image)
 - [SDL3_ttf](https://github.com/libsdl-org/SDL_ttf)
-- [Dear ImGui](https://github.com/ocornut/imgui)

@@ -3,6 +3,8 @@
 #include <SDL3/SDL_render.h>
 
 #include "arkanoid_lib/game/Game.h"
+#include "arkanoid_lib/game/IBounceable.h"
+#include "arkanoid_lib/game/IConsumeable.h"
 
 namespace arkanoid::game
 {
@@ -146,7 +148,6 @@ namespace arkanoid::game
 			IBounceable* bounceable = bounceables[i];
 			if (!bounceable)
 			{
-				bounceables.erase(bounceables.begin() + i);
 				continue;
 			}
 
@@ -165,7 +166,7 @@ namespace arkanoid::game
 
 			const float overlapX = overlapLeft < overlapRight ? overlapLeft : overlapRight;
 			const float overlapY = overlapTop < overlapBottom ? overlapTop : overlapBottom;
-			
+
 			float directionX = m_fDirectionX;
 			float directionY = m_fDirectionY;
 
@@ -198,6 +199,29 @@ namespace arkanoid::game
 			bounceable->OnHit();
 
 			hitAnything = true;
+
+			break;
+		}
+		
+		std::vector<IConsumeable*>& consumeables = game.GetWorld().GetConsumeables();
+		const size_t numConsumeables = consumeables.size();
+		for (int i = static_cast<int>(numConsumeables) - 1; i >= 0; i--)
+		{
+			IConsumeable* consumeable = consumeables[i];
+			if (!consumeable)
+			{
+				continue;
+			}
+
+			const SDL_FRect ballRect = GetCollider();
+			const SDL_FRect consumeableRect = consumeable->GetCollider();
+
+			if (!SDL_HasRectIntersectionFloat(&ballRect, &consumeableRect))
+			{
+				continue;
+			}
+
+			consumeable->Consume();
 
 			break;
 		}

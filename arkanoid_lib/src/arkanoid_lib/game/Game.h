@@ -30,6 +30,7 @@ namespace arkanoid::game
 		Game(SDL_Window& a_Window, SDL_Renderer& a_Renderer);
 
 		void Initialize();
+		void Start();
 		void LoadTextures();
 		void LoadSounds();
 
@@ -61,9 +62,16 @@ namespace arkanoid::game
 
 		void ResetLives();
 		void LoseLife();
+		void AddLife();
+
+		float GetPowerUpSpawnChance() const
+		{
+			return m_fPowerUpSpawnChance;
+		}
 	private:
 		resources::Sound* m_pLevelCompleteSound = nullptr; // Not owned.
 		resources::Sound* m_pLifeLostSound = nullptr; // Not owned.
+		resources::Sound* m_pAddLifeSound = nullptr; // Not owned.
 		resources::Sound* m_pGameOverSound = nullptr; // Not owned.
 		size_t m_iLives = 0;
 
@@ -81,5 +89,7 @@ namespace arkanoid::game
 
 		float m_fDummyWidth = 0; // Width of a brick.
 		float m_fDummyHeight = 0; // Height of a brick.
+
+		float m_fPowerUpSpawnChance = 0.3f;
 	};
 }

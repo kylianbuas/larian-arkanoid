@@ -2,33 +2,32 @@
 
 #include <SDL3/SDL_render.h>
 
+#include "arkanoid_lib/game/Explosion.h"
 #include "arkanoid_lib/game/Game.h"
+#include "arkanoid_lib/game/PowerUp.h"
+#include "arkanoid_lib/game/PowerUpTypes.h"
 #include "arkanoid_lib/level/BrickTypes.h"
+#include "arkanoid_lib/utils/Random.h"
 
 namespace arkanoid::game
 {
-	Brick::Brick(level::EBrickType a_eType, int a_iPosX, int a_iPosY, float a_fBrickWidth, float a_fBrickHeight) : IBounceable(),
-		m_eType(a_eType),
-		m_iPosX(a_iPosX),
-		m_iPosY(a_iPosY)
+	Brick::Brick(level::EBrickType a_eType, int a_iPosX, int a_iPosY, float a_fBrickWidth, float a_fBrickHeight) : GameObject(a_iPosX, a_iPosY), IBounceable(),
+		m_eType(a_eType)
 	{
-		m_rCollider = {
-			m_iPosX * a_fBrickWidth,
-				m_iPosY * a_fBrickHeight,
-				a_fBrickWidth,
-				a_fBrickHeight
-		};
+		m_fPosX *= a_fBrickWidth;
+		m_fPosY *= a_fBrickHeight;
 
-		game::GetGame().GetWorld().AddBounceable(*this);
+		m_rCollider = {
+			m_fPosX,
+			m_fPosY,
+			a_fBrickWidth,
+			a_fBrickHeight
+		};
 	}
 
 	void Brick::LoadTextures(resources::ResourceSystem& a_ResourceSystem)
 	{
 		m_pBrickTexture = a_ResourceSystem.GetTexture(resources::ETextureType::BRICK);
-		m_pExplosionTexture = a_ResourceSystem.GetTexture(resources::ETextureType::EXPLOSION);
-
-		SDL_GetTextureSize(m_pExplosionTexture, &m_fExplosionWidth, &m_fExplosionHeight);
-		m_fExplosionWidth /= m_iMaxExplosionFrames;
 	}
 
 	void Brick::LoadSounds(resources::ResourceSystem& a_ResourceSystem)
@@ -62,7 +61,25 @@ namespace arkanoid::game
 
 		if (m_iHealth <= 0)
 		{
-			game::GetGame().GetWorld().RemoveBounceable(*this);
+			Destroy();
+		}
+	}
+
+	void Brick::OnDestroyed()
+	{
+		const SDL_FRect collider = GetCollider();
+		game::GetGame().GetWorld().SpawnGameObject<Explosion>(
+			collider.x + collider.w * 0.5f,
+			collider.y + collider.h * 0.5f
+		);
+
+		if (utils::Random::RollChance(GetGame().GetPowerUpSpawnChance()))
+		{
+			game::GetGame().GetWorld().SpawnGameObject<PowerUp>(
+				EPowerUpType::ONE_UP,
+				collider.x + collider.w * 0.5f,
+				collider.y + collider.h * 0.5f
+			);
 		}
 	}
 
@@ -76,160 +93,36 @@ namespace arkanoid::game
 		m_iHealth = a_iHealth;
 	}
 
-	bool Brick::IsDestroyed() const
-	{
-		return m_iHealth <= 0;
-	}
-
-	int Brick::GetPosX() const
-	{
-		return m_iPosX;
-	}
-
-	int Brick::GetPosY() const
-	{
-		return m_iPosY;
-	}
-
 	level::EBrickType Brick::GetBrickType() const
 	{
 		return m_eType;
 	}
 
-	void Brick::Update(float m_fDeltaTime)
+	void Brick::Update(float a_fDeltaTime)
 	{
-		if (IsDestroyed())
-		{
-			if (m_pExplosionTexture)
-			{
-				m_fExplosionTimer += m_fDeltaTime;
-
-				if (m_fExplosionTimer >= m_fExplosionTime)
-				{
-					m_fExplosionTimer -= m_fExplosionTime;
-					m_iExplosionIndex++;
-
-					if (m_iExplosionIndex >= m_iMaxExplosionFrames)
-					{
-						m_pExplosionTexture = nullptr;
-					}
-				}
-			}
-		}
 	}
 
 	void Brick::Render(SDL_Renderer& a_Renderer) const
 	{
 		const SDL_FRect collider = GetCollider();
 
-		if (IsDestroyed())
+		if (m_pBrickTexture)
 		{
 			SDL_FRect srcRect = {
-				m_iExplosionIndex * m_fExplosionWidth,
+				static_cast<float>((static_cast<int>(m_eType) - 1) * collider.w),
 				0.0f,
-				m_fExplosionWidth,
-				m_fExplosionHeight
+				static_cast<float>(collider.w),
+				static_cast<float>(collider.h)
 			};
 
-			SDL_FRect dstRect = {
-				m_rCollider.x + (m_rCollider.w - m_fExplosionWidth) * 0.5f,
-				m_rCollider.y + (m_rCollider.h - m_fExplosionHeight) * 0.5f,
-				m_fExplosionWidth,
-				m_fExplosionHeight
-			};
-
-			SDL_RenderTexture(&a_Renderer, m_pExplosionTexture, &srcRect, &dstRect);
+			SDL_RenderTexture(&a_Renderer, m_pBrickTexture, &srcRect, &collider);
 		}
 		else
 		{
-			if (m_pBrickTexture)
-			{
-				SDL_FRect srcRect = {
-					static_cast<float>((static_cast<int>(m_eType) - 1) * collider.w),
-					0.0f,
-					static_cast<float>(collider.w),
-					static_cast<float>(collider.h)
-				};
-
-				SDL_RenderTexture(&a_Renderer, m_pBrickTexture, &srcRect, &collider);
-			}
-			else
-			{
-				switch (m_eType)
-				{
-					case level::EBrickType::RED:
-					{
-						SDL_SetRenderDrawColor(&a_Renderer, 255, 0, 0, 255);
-						break;
-					}
-					case level::EBrickType::BLUE:
-					{
-						SDL_SetRenderDrawColor(&a_Renderer, 0, 0, 255, 255);
-						break;
-					}
-					case level::EBrickType::GREEN:
-					{
-						SDL_SetRenderDrawColor(&a_Renderer, 0, 255, 0, 255);
-						break;
-					}
-					case level::EBrickType::YELLOW:
-					{
-						SDL_SetRenderDrawColor(&a_Renderer, 255, 216, 0, 255);
-						break;
-					}
-					case level::EBrickType::ORANGE:
-					{
-						SDL_SetRenderDrawColor(&a_Renderer, 255, 106, 0, 255);
-						break;
-					}
-					case level::EBrickType::PURPLE:
-					{
-						SDL_SetRenderDrawColor(&a_Renderer, 178, 0, 255, 255);
-						break;
-					}
-					case level::EBrickType::CYAN:
-					{
-						SDL_SetRenderDrawColor(&a_Renderer, 0, 255, 255, 255);
-						break;
-					}
-					case level::EBrickType::WHITE:
-					{
-						SDL_SetRenderDrawColor(&a_Renderer, 25, 255, 255, 255);
-						break;
-					}
-					case level::EBrickType::RAINBOW:
-					{
-						SDL_SetRenderDrawColor(&a_Renderer, 50, 50, 255, 255);
-						break;
-					}
-					case level::EBrickType::QUESTIONMARK:
-					{
-						SDL_SetRenderDrawColor(&a_Renderer, 255, 216, 0, 255);
-						break;
-					}
-					case level::EBrickType::BRICK:
-					{
-						SDL_SetRenderDrawColor(&a_Renderer, 151, 94, 45, 255);
-						break;
-					}
-					case level::EBrickType::GROUND:
-					{
-						SDL_SetRenderDrawColor(&a_Renderer, 185, 99, 55, 255);
-						break;
-					}
-					case level::EBrickType::BLACK:
-					{
-						SDL_SetRenderDrawColor(&a_Renderer, 0, 0, 0, 255);
-						break;
-					}
-					case level::EBrickType::GRAY:
-					{
-						SDL_SetRenderDrawColor(&a_Renderer, 94, 94, 94, 255);
-						break;
-					}
-				}
-				SDL_RenderFillRect(&a_Renderer, &collider);
-			}
+			Uint8 r, g, b;
+			level::GetBrickColor(m_eType, r, g, b);
+			SDL_SetRenderDrawColor(&a_Renderer, r, g, b, 255);
+			SDL_RenderFillRect(&a_Renderer, &collider);
 		}
 	}
 }

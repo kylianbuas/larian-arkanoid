@@ -6,7 +6,7 @@
 
 namespace arkanoid::game
 {
-    Paddle::Paddle() : IBounceable()
+    Paddle::Paddle() : GameObject(0, 0), IBounceable()
     {}
 
 	void Paddle::LoadTextures(resources::ResourceSystem& a_ResourceSystem)

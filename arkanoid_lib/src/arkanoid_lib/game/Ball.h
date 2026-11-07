@@ -15,6 +15,9 @@ namespace arkanoid::game
 	class Ball
 	{
 	public:
+		Ball() = default;
+		virtual ~Ball() = default;
+
 		void LoadTextures(resources::ResourceSystem& a_ResourceSystem);
 		void LoadSounds(resources::ResourceSystem& a_ResourceSystem);
 		void Reset();

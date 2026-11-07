@@ -25,25 +25,18 @@ namespace arkanoid::level
 
 		bool IsComplete() const;
 
-		std::vector<game::Brick>& GetBricks();
-		const std::vector<game::Brick>& GetBricks() const;
+		// Bricks are heap allocated one by one: World::m_aBounceables stores raw pointers to them,
+		// so a brick must never move inside the vector (erasing/inserting would dangle those pointers).
+		std::vector<std::unique_ptr<game::Brick>>& GetBricks();
+		const std::vector<std::unique_ptr<game::Brick>>& GetBricks() const;
 
-		void Shine(float a_fDeltaTime);
 		void Update(float a_fDeltaTime);
 
 		void Render(SDL_Renderer& a_Renderer) const;
 	private:
-		std::vector<game::Brick> m_aBricks; 
+		std::vector<std::unique_ptr<game::Brick>> m_aBricks; // Owns the bricks.
 
 		SDL_Texture* m_pBrickTexture = nullptr; // Not owned.
-		SDL_Texture* m_pBrickShineTexture = nullptr; // Not owned.
-
-		float m_fShineTime = 0.0f;
-		const float m_fShineChange = 0.15f;
-		int m_iShineIndex = 0;
-		int m_iShineMax = 5;
-		float m_fShineDelay = 3.0f;
-		float m_fShineDelayTime = 0.0f;
 
 		float m_fBrickWidth = 0;
 		float m_fBrickHeight = 0;

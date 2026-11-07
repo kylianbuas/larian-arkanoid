@@ -34,14 +34,6 @@ set_property(TARGET arkanoid_lib PROPERTY FOLDER "lib")
 
 # Platform-specific modules (Win32 only)
 if(WIN32)
-	# IMGUI
-	file(GLOB_RECURSE IMGUI_SOURCES ${CMAKE_SOURCE_DIR}/external/imgui/*.cpp)
-
-	add_library(imgui STATIC ${IMGUI_SOURCES})
-	target_include_directories(imgui PUBLIC ${CMAKE_SOURCE_DIR}/external ${CMAKE_SOURCE_DIR}/external/imgui ${CMAKE_SOURCE_DIR}/external/SDL3)
-	set_target_properties(imgui PROPERTIES CXX_STANDARD 20 CXX_STANDARD_REQUIRED ON FOLDER "ThirdParty")
-	source_group(TREE ${CMAKE_SOURCE_DIR}/external/imgui PREFIX "" FILES ${IMGUI_SOURCES})
-
 	include(arkanoid_game/arkanoid_game.cmake)
 	set_property(TARGET arkanoid_game PROPERTY FOLDER "executables")
 

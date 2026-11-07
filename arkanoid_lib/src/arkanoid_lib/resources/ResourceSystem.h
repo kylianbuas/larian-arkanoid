@@ -25,7 +25,8 @@ namespace arkanoid::resources
 		PADDLE,
 		BALL,
 		EXPLOSION,
-		MAX = EXPLOSION
+		POWER_UP,
+		MAX = POWER_UP
 	};
 
 	enum class ESoundType
@@ -35,7 +36,8 @@ namespace arkanoid::resources
 		LEVEL_COMPLETE,
 		LIFE_LOST,
 		GAME_OVER,
-		MAX = GAME_OVER
+		ADD_LIFE,
+		MAX = ADD_LIFE
 	};
 
 	class Sound

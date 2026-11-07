@@ -1,7 +1,6 @@
 #include <memory>
 #include <SDL3/SDL.h>
 
-#include "arkanoid_level_editor/imgui/ImGuiSystem.h"
 #include "arkanoid_level_editor/editor/Editor.h"
 
 using namespace arkanoid;
@@ -16,6 +15,8 @@ namespace arkanoid::editor
 	}
 }
 
+constexpr float UPSCALE = 3;
+
 int main(int a_iNumArgs, char* a_aArgs[])
 {
 	if (!SDL_Init(SDL_INIT_VIDEO))
@@ -24,7 +25,7 @@ int main(int a_iNumArgs, char* a_aArgs[])
 		return 1;
 	}
 
-	SDL_Window* window = SDL_CreateWindow("Arkanoid", 1000, 1000, SDL_WINDOW_RESIZABLE);
+	SDL_Window* window = SDL_CreateWindow("Arkanoid Level Editor", 1200, 960, SDL_WINDOW_RESIZABLE);
 
 	if (!window)
 	{
@@ -43,20 +44,28 @@ int main(int a_iNumArgs, char* a_aArgs[])
 	}
 
 	EDITOR = std::make_unique<editor::Editor>(*window, *renderer);
-	if (!EDITOR->LoadTextures())
+
+	if (a_iNumArgs > 1)
 	{
-		SDL_DestroyWindow(window);
-		SDL_Quit();
-		return 1;
+		EDITOR->SetLevelPath(a_aArgs[1]);
 	}
 
-	imgui::ImGuiSystem imguiSystem;
-	if (!imguiSystem.Initialize(*window, *renderer))
-	{
-		SDL_DestroyWindow(window);
-		SDL_Quit();
-		return 1;
-	}
+	EDITOR->LoadTextures();
+
+	const float width = EDITOR->GetContentWidth();
+	const float height = EDITOR->GetContentHeight();
+	const float resolution = width / height;
+
+	SDL_SetWindowSize(window, static_cast<int>(width * UPSCALE), static_cast<int>(height * UPSCALE));
+	SDL_SetWindowAspectRatio(window, resolution, resolution);
+	SDL_SetRenderLogicalPresentation(
+		renderer,
+		width,
+		height,
+		SDL_LOGICAL_PRESENTATION_LETTERBOX
+	);
+
+	EDITOR->Initialize();
 
 	bool running = true;
 
@@ -66,21 +75,25 @@ int main(int a_iNumArgs, char* a_aArgs[])
 
 		while (SDL_PollEvent(&event))
 		{
-			if (event.type == SDL_EVENT_QUIT)
+			if (!EDITOR->ProcessEvent(event))
 			{
 				running = false;
+				break;
 			}
-			imguiSystem.ProcessEvents(event);
 		}
 
-		SDL_SetRenderDrawColor(renderer, 15, 20, 35, 255);
-		SDL_RenderClear(renderer);
+		if (!running)
+		{
+			break;
+		}
 
-		imguiSystem.Render(*renderer);
-
+		EDITOR->Render();
 		SDL_RenderPresent(renderer);
 	}
 
+	EDITOR->Destroy();
+
+	SDL_DestroyRenderer(renderer);
 	SDL_DestroyWindow(window);
 	SDL_Quit();
 

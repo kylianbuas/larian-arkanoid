@@ -4,19 +4,21 @@ namespace arkanoid::game
 {
 	void World::LoadTextures(resources::ResourceSystem& a_ResourceSystem)
 	{
-		m_Level.LoadTextures(a_ResourceSystem);
-		m_Ball.LoadTextures(a_ResourceSystem);
-		m_Paddle.LoadTextures(a_ResourceSystem);
+		m_pLevel->LoadTextures(a_ResourceSystem);
+		m_pBall->LoadTextures(a_ResourceSystem);
+		m_pPaddle->LoadTextures(a_ResourceSystem);
 	}
 
 	void World::LoadSounds(resources::ResourceSystem& a_ResourceSystem)
 	{
-		m_Ball.LoadSounds(a_ResourceSystem);
+		m_pBall->LoadSounds(a_ResourceSystem);
 	}
 
 	void World::Initialize()
 	{
-		m_Level.Clear();
+		m_pLevel = std::make_unique<level::Level>();
+		m_pBall = std::make_unique<Ball>();
+		m_pPaddle = std::make_unique<Paddle>();
 
 		ResetWorld();
 	}
@@ -24,57 +26,72 @@ namespace arkanoid::game
 	void World::ResetWorld()
 	{
 		m_aBounceables.clear();
-		m_Level.Clear();
+		m_pLevel->Clear();
 
-		m_Ball.Reset();
-		m_Paddle.Reset();
+		m_pBall->Reset();
+		m_pPaddle->Reset();
 	}
 
 	bool World::Update(float a_fDeltaTime)
 	{
-		m_Ball.Update(a_fDeltaTime); // First update the ball. The ball iterates through bounceables.
+		std::erase_if(m_aGameObjects, [](const std::unique_ptr<GameObject>& gameObject)
+		{
+			return gameObject->IsDestroyed();
+		});
 
-		m_Level.Update(a_fDeltaTime);
-		m_Paddle.Update(a_fDeltaTime);
+		for (const std::unique_ptr<GameObject>& gameObject : m_aGameObjects)
+		{
+			gameObject->Update(a_fDeltaTime);
+		}
 
-		return m_Level.IsComplete();
+		m_pBall->Update(a_fDeltaTime); // First update the ball. The ball iterates through bounceables.
+
+		m_pLevel->Update(a_fDeltaTime);
+		m_pPaddle->Update(a_fDeltaTime);
+
+		return m_pLevel->IsComplete();
 	}
 
 	void World::Render(SDL_Renderer& a_Renderer) const
 	{
-		m_Level.Render(a_Renderer);
-		m_Paddle.Render(a_Renderer);
-		m_Ball.Render(a_Renderer);
+		m_pLevel->Render(a_Renderer);
+		m_pPaddle->Render(a_Renderer);
+		m_pBall->Render(a_Renderer);
+
+		for (const std::unique_ptr<GameObject>& gameObject : m_aGameObjects)
+		{
+			gameObject->Render(a_Renderer);
+		}
 	}
 
 	const level::Level& World::GetLevel() const
 	{
-		return m_Level;
+		return *m_pLevel;
 	}
 
 	level::Level& World::GetLevel()
 	{
-		return m_Level;
+		return *m_pLevel;
 	}
 
 	const game::Ball& World::GetBall() const
 	{
-		return m_Ball;
+		return *m_pBall;
 	}
 
 	game::Ball& World::GetBall()
 	{
-		return m_Ball;
+		return *m_pBall;
 	}
 
 	const game::Paddle& World::GetPaddle() const
 	{
-		return m_Paddle;
+		return *m_pPaddle;
 	}
 
 	game::Paddle& World::GetPaddle()
 	{
-		return m_Paddle;
+		return *m_pPaddle;
 	}
 
 	void World::AddBounceable(IBounceable& a_Bounceable)
@@ -87,12 +104,20 @@ namespace arkanoid::game
 
 	void World::RemoveBounceable(IBounceable & a_Bounceable)
 	{
-		// Set the pointer in the vector to null and erase it in the next update.
-		std::vector<IBounceable*>::iterator it = std::find(m_aBounceables.begin(), m_aBounceables.end(), &a_Bounceable);
-		if (it != m_aBounceables.end())
+		std::erase(m_aBounceables, &a_Bounceable);
+	}
+
+    void World::AddConsumeable(IConsumeable& a_Consumeable)
+    {
+		if (std::find(m_aConsumeables.begin(), m_aConsumeables.end(), &a_Consumeable) == m_aConsumeables.end())
 		{
-			*it = nullptr;
+			m_aConsumeables.push_back(&a_Consumeable);
 		}
+	}
+
+	void World::RemoveConsumeable(IConsumeable & a_Consumeable)
+	{
+		std::erase(m_aConsumeables, &a_Consumeable);
 	}
 
 	const std::vector<IBounceable*>& World::GetBounceables() const
@@ -103,5 +128,15 @@ namespace arkanoid::game
 	std::vector<IBounceable*>& World::GetBounceables()
 	{
 		return m_aBounceables;
+	}
+
+	const std::vector<IConsumeable*>& World::GetConsumeables() const
+	{
+		return m_aConsumeables;
+	}
+
+	std::vector<IConsumeable*>& World::GetConsumeables()
+	{
+		return m_aConsumeables;
 	}
 }

@@ -12,7 +12,6 @@ namespace arkanoid::level
     bool Level::LoadTextures(resources::ResourceSystem& a_ResourceSystem)
     {
 		m_pBrickTexture = a_ResourceSystem.GetTexture(resources::ETextureType::BRICK);
-		m_pBrickShineTexture = a_ResourceSystem.GetTexture(resources::ETextureType::BRICK_SHINE_OVERLAY);
 
         return true;
     }
@@ -45,11 +44,13 @@ namespace arkanoid::level
 				continue;
 			}
 
-			const int x = i % LEVEL_WIDTH;
-			const int y = i / LEVEL_WIDTH;
+			// Both of these are index positions, not world positions.
+			const size_t x = i % LEVEL_WIDTH;
+			const size_t y = i / LEVEL_WIDTH;
 
-			game::Brick& brick = m_aBricks.emplace_back(brickType, x, y, m_fBrickWidth, m_fBrickHeight);
+			m_aBricks.emplace_back(std::make_unique<game::Brick>(brickType, x, y, m_fBrickWidth, m_fBrickHeight));
 
+			game::Brick& brick = *m_aBricks.back();
 			brick.LoadTextures(resourceSystem);
 			brick.LoadSounds(resourceSystem);
 		}
@@ -59,14 +60,24 @@ namespace arkanoid::level
 
 	void Level::Clear()
 	{
+		for (const std::unique_ptr<game::Brick>& brick : m_aBricks)
+		{
+			if (!brick)
+			{
+				continue;
+			}
+
+			brick->Destroy();
+		}
+
 		m_aBricks.clear();
 	}
 
 	bool Level::IsComplete() const
 	{
-		for (const game::Brick& brick : m_aBricks)
+		for (const std::unique_ptr<game::Brick>& brick : m_aBricks)
 		{
-			if (!brick.IsDestroyed())
+			if (brick && !brick->IsDestroyed())
 			{
 				return false;
 			}
@@ -74,86 +85,44 @@ namespace arkanoid::level
 		return true;
 	}
 
-	std::vector<game::Brick>& Level::GetBricks()
+	std::vector<std::unique_ptr<game::Brick>>& Level::GetBricks()
 	{
 		return m_aBricks;
 	}
 
-	const std::vector<game::Brick>& Level::GetBricks() const
+	const std::vector<std::unique_ptr<game::Brick>>& Level::GetBricks() const
 	{
 		return m_aBricks;
-	}
-
-	void Level::Shine(float a_fDeltaTime)
-	{
-		if (m_fShineDelayTime > 0.0f)
-		{
-			m_fShineDelayTime -= a_fDeltaTime;
-			if (m_fShineDelayTime > 0.0f)
-			{
-				return;
-			}
-
-			m_fShineTime = -m_fShineDelayTime;
-			m_fShineDelayTime = 0.0f;
-		}
-		else
-		{
-			m_fShineTime += a_fDeltaTime;
-		}
-
-		if (m_fShineTime < m_fShineChange)
-		{
-			return;
-		}
-
-		m_fShineTime -= m_fShineChange;
-		m_iShineIndex++;
-
-		if (m_iShineIndex >= m_iShineMax)
-		{
-			m_iShineIndex = 0;
-			m_fShineDelayTime = m_fShineDelay;
-		}
 	}
 
 	void Level::Update(float a_fDeltaTime)
 	{
-		size_t bricksSize = m_aBricks.size();
-		for (size_t i = 0; i < bricksSize; i++)
+		std::erase_if(m_aBricks, [](const std::unique_ptr<game::Brick>& brick)
 		{
-			game::Brick& brick = m_aBricks[i];
-			brick.Update(a_fDeltaTime);
-		}
+			return brick->IsDestroyed();
+		});
 
-		Shine(a_fDeltaTime);
-	}
-
-    void Level::Render(SDL_Renderer& a_Renderer) const
-    {
-		size_t bricksSize = m_aBricks.size();
-		for (size_t i = 0; i < bricksSize; i++)
+		for (const std::unique_ptr<game::Brick>& brick : m_aBricks)
 		{
-			const game::Brick& brick = m_aBricks[i];
-
-			brick.Render(a_Renderer);
-
-			if (brick.IsDestroyed())
+			if (!brick)
 			{
 				continue;
 			}
 
-			if (m_pBrickShineTexture)
+			brick->Update(a_fDeltaTime);
+		}
+	}
+
+    void Level::Render(SDL_Renderer& a_Renderer) const
+    {
+		for (const std::unique_ptr<game::Brick>& brick : m_aBricks)
+		{
+			if (!brick)
 			{
-				const SDL_FRect collider = brick.GetCollider();
-				const SDL_FRect shineSrcRect = {
-					static_cast<float>(m_iShineIndex * collider.w),
-					0.0f,
-					static_cast<float>(collider.w),
-					static_cast<float>(collider.h)
-				};
-				SDL_RenderTexture(&a_Renderer, m_pBrickShineTexture, &shineSrcRect, &collider);
+				continue;
 			}
+
+			brick->Render(a_Renderer);
 		}
 	}
 }

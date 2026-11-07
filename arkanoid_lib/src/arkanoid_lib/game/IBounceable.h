@@ -7,7 +7,8 @@ namespace arkanoid::game
 	class IBounceable
 	{
 	public:
-		virtual ~IBounceable() = default;
+		IBounceable();
+		virtual ~IBounceable();
 
 		virtual SDL_FRect GetCollider() const = 0;
 
