@@ -117,6 +117,11 @@ namespace arkanoid::game
 
 	void World::RemoveBounceable(IBounceable & a_Bounceable)
 	{
+		if (m_aBounceables.empty())
+		{
+			return;
+		}
+
 		std::erase(m_aBounceables, &a_Bounceable);
 	}
 
