@@ -26,7 +26,7 @@ namespace arkanoid::text
 
 		if (!m_pFont->m_pFont)
 		{
-			SDL_Log("Failed to load font: %s", SDL_GetError());
+			m_pFont->m_pFont = TTF_OpenFont("C:/Windows/Fonts/arial.ttf", 12.0f);
 		}
 	}
 

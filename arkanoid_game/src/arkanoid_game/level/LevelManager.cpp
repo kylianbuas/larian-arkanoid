@@ -27,10 +27,8 @@ namespace arkanoid::level
 		level::LevelData levelData = m_ResourceSystem.LoadLevel(m_aLevelNames[a_iLevelIndex]);
 		if (levelData.GetBricks().empty())
 		{
-			return false;
+			levelData.Load(std::vector<uint8_t>(game::FALLBACK_LEVEL.begin(), game::FALLBACK_LEVEL.end()));
 		}
-
-		levelData.Load(std::vector<uint8_t>(game::FALLBACK_LEVEL.begin(), game::FALLBACK_LEVEL.end()));
 
 		return a_Level.Initialize(levelData);
 	}
