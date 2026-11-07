@@ -3,6 +3,7 @@
 #include "arkanoid_lib/resources/ResourceSystem.h"
 
 #include "arkanoid_game/level/Level.h"
+#include "arkanoid_game/game/GameSettings.h"
 
 namespace arkanoid::level
 {
@@ -24,6 +25,13 @@ namespace arkanoid::level
 
 		m_iCurrentLevel = a_iLevelIndex;
 		level::LevelData levelData = m_ResourceSystem.LoadLevel(m_aLevelNames[a_iLevelIndex]);
+		if (levelData.GetBricks().empty())
+		{
+			return false;
+		}
+
+		levelData.Load(std::vector<uint8_t>(game::FALLBACK_LEVEL.begin(), game::FALLBACK_LEVEL.end()));
+
 		return a_Level.Initialize(levelData);
 	}
 

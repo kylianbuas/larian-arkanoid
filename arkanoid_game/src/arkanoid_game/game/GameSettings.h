@@ -1,5 +1,7 @@
 #pragma once
 
+#include "arkanoid_lib/level/BrickTypes.h"
+#include "arkanoid_lib/level/LevelData.h"
 #include "arkanoid_game/game/PowerUpTypes.h"
 
 namespace arkanoid::game
@@ -12,4 +14,54 @@ namespace arkanoid::game
 	constexpr float SHOOTING_POWER_UP_TIMER = 5.0f;
 	constexpr float SHOOTING_POWER_UP_DELAY = 0.2f;
 	constexpr EPowerUpType MAX_POWER_UP = EPowerUpType::SHOOTER;
+	constexpr std::array<uint8_t, 48> FALLBACK_LEVEL = {
+		static_cast<uint8_t>(level::EBrickType::EMPTY),
+		static_cast<uint8_t>(level::EBrickType::EMPTY),
+		static_cast<uint8_t>(level::EBrickType::EMPTY),
+		static_cast<uint8_t>(level::EBrickType::EMPTY),
+		static_cast<uint8_t>(level::EBrickType::EMPTY),
+		static_cast<uint8_t>(level::EBrickType::EMPTY),
+		static_cast<uint8_t>(level::EBrickType::EMPTY),
+		static_cast<uint8_t>(level::EBrickType::EMPTY),
+		static_cast<uint8_t>(level::EBrickType::EMPTY),
+		static_cast<uint8_t>(level::EBrickType::EMPTY),
+		static_cast<uint8_t>(level::EBrickType::EMPTY),
+		static_cast<uint8_t>(level::EBrickType::EMPTY),
+		static_cast<uint8_t>(level::EBrickType::EMPTY),
+		static_cast<uint8_t>(level::EBrickType::EMPTY),
+		static_cast<uint8_t>(level::EBrickType::EMPTY),
+		static_cast<uint8_t>(level::EBrickType::EMPTY),
+		static_cast<uint8_t>(level::EBrickType::EMPTY),
+		static_cast<uint8_t>(level::EBrickType::EMPTY),
+		static_cast<uint8_t>(level::EBrickType::EMPTY),
+		static_cast<uint8_t>(level::EBrickType::EMPTY),
+		static_cast<uint8_t>(level::EBrickType::EMPTY),
+		static_cast<uint8_t>(level::EBrickType::EMPTY),
+		static_cast<uint8_t>(level::EBrickType::EMPTY),
+		static_cast<uint8_t>(level::EBrickType::EMPTY),
+		static_cast<uint8_t>(level::EBrickType::CYAN),
+		static_cast<uint8_t>(level::EBrickType::CYAN),
+		static_cast<uint8_t>(level::EBrickType::CYAN),
+		static_cast<uint8_t>(level::EBrickType::CYAN),
+		static_cast<uint8_t>(level::EBrickType::CYAN),
+		static_cast<uint8_t>(level::EBrickType::CYAN),
+		static_cast<uint8_t>(level::EBrickType::CYAN),
+		static_cast<uint8_t>(level::EBrickType::CYAN),
+		static_cast<uint8_t>(level::EBrickType::CYAN),
+		static_cast<uint8_t>(level::EBrickType::CYAN),
+		static_cast<uint8_t>(level::EBrickType::CYAN),
+		static_cast<uint8_t>(level::EBrickType::CYAN),
+		static_cast<uint8_t>(level::EBrickType::RED),
+		static_cast<uint8_t>(level::EBrickType::RED),
+		static_cast<uint8_t>(level::EBrickType::RED),
+		static_cast<uint8_t>(level::EBrickType::RED),
+		static_cast<uint8_t>(level::EBrickType::YELLOW),
+		static_cast<uint8_t>(level::EBrickType::YELLOW),
+		static_cast<uint8_t>(level::EBrickType::YELLOW),
+		static_cast<uint8_t>(level::EBrickType::YELLOW),
+		static_cast<uint8_t>(level::EBrickType::YELLOW),
+		static_cast<uint8_t>(level::EBrickType::YELLOW),
+		static_cast<uint8_t>(level::EBrickType::YELLOW),
+		static_cast<uint8_t>(level::EBrickType::YELLOW),
+	};
 }
