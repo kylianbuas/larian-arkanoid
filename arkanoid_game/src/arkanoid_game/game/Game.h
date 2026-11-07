@@ -67,11 +67,6 @@ namespace arkanoid::game
 		void LoseLife();
 		void AddLife();
 
-		float GetPowerUpSpawnChance() const
-		{
-			return m_fPowerUpSpawnChance;
-		}
-
 		const GameEvents& GetGameEvents() const;
 		GameEvents& GetGameEvents();
 	private:
@@ -94,7 +89,5 @@ namespace arkanoid::game
 
 		float m_fDummyWidth = 0; // Width of a brick.
 		float m_fDummyHeight = 0; // Height of a brick.
-
-		float m_fPowerUpSpawnChance = 0.3f;
 	};
 }

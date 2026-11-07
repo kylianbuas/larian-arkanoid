@@ -21,7 +21,7 @@ namespace arkanoid::game
 		virtual void LoadTextures(resources::ResourceSystem& a_ResourceSystem);
 		virtual void LoadSounds(resources::ResourceSystem& a_ResourceSystem);
 
-		void Destroy();
+		void Destroy(bool a_bForce = false);
 		bool IsDestroyed() const;
 		virtual void OnDestroyed()
 		{}

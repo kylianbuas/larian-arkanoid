@@ -50,9 +50,9 @@ namespace arkanoid::game
 		std::vector<IConsumeable*>& GetConsumeables();
 
 		template<typename T, typename... Args>
-		void SpawnIGameObject(Args&&... a_Args)
+		void SpawnGameObject(Args&&... a_Args)
 		{
-			m_aIGameObjects.emplace_back(
+			m_aGameObjects.emplace_back(
 				std::make_unique<T>(std::forward<Args>(a_Args)...)
 			);
 		}
@@ -64,6 +64,6 @@ namespace arkanoid::game
 		std::vector<IBounceable*> m_aBounceables; // Non-owning.
 		std::vector<IConsumeable*> m_aConsumeables; // Non-owning.
 
-		std::vector<std::unique_ptr<IGameObject>> m_aIGameObjects; // Owns the objects.
+		std::vector<std::unique_ptr<IGameObject>> m_aGameObjects; // Owns the objects.
 	};
 }

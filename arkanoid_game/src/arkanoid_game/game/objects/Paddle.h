@@ -29,6 +29,8 @@ namespace arkanoid::game
 
 		void Update(float a_fDeltaTime);
 		void Render(SDL_Renderer& a_Renderer) const;
+
+		void ActivateShooting();
 	private:
 		SDL_Texture* m_pPaddleTexture = nullptr; // Not owned.
 
@@ -37,5 +39,8 @@ namespace arkanoid::game
 
 		bool m_bIsMoving = false;
 		float m_fMovementSpeed = 1.f;
+
+		float m_fShootingTimer = 0.0f;
+		float m_fShootingDelay = 0.0f;
 	};
 }

@@ -59,6 +59,7 @@ namespace arkanoid::game
 		m_ResourceSystem.LoadTexture(resources::ETextureType::BALL, "tex_ball.png");
 		m_ResourceSystem.LoadTexture(resources::ETextureType::EXPLOSION, "tex_explosion.png");
 		m_ResourceSystem.LoadTexture(resources::ETextureType::POWER_UP, "tex_powerups.png");
+		m_ResourceSystem.LoadTexture(resources::ETextureType::LASER, "tex_laser.png");
 
 		m_World.LoadTextures(m_ResourceSystem);
 	}

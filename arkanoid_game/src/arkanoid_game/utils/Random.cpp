@@ -9,4 +9,10 @@ namespace arkanoid::utils
         std::bernoulli_distribution distribution(a_fChance);
         return distribution(m_RandomEngine);
     }
+
+    int Random::RandomInt(int a_iMin, int a_iMax)
+    {
+		std::uniform_int_distribution<int> distribution(a_iMin, a_iMax);
+		return distribution(m_RandomEngine);
+    }
 }

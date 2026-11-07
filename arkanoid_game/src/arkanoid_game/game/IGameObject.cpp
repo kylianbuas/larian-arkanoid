@@ -18,11 +18,14 @@ namespace arkanoid::game
 
 	}
 
-	void IGameObject::Destroy()
+	void IGameObject::Destroy(bool a_bForce)
 	{
 		m_bDestroyed = true;
 
-		OnDestroyed();
+		if (!a_bForce)
+		{
+			OnDestroyed();
+		}
 	}
 
 	bool IGameObject::IsDestroyed() const

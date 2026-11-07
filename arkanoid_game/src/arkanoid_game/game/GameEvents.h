@@ -28,6 +28,7 @@ namespace arkanoid::game
 		mutable std::vector<Callback> m_Callbacks; // Mutable because const should still be possible to be subscribed to.
 	};
 
+	enum class EPowerUpType : uint8_t;
 	class IBounceable;
 
 	class GameEvents
@@ -39,5 +40,7 @@ namespace arkanoid::game
 		Event<> OnLifeAdded;
 		Event<const IBounceable*> OnBallHitAnything;
 		Event<level::EBrickType> OnBallHitBrick;
+		Event<game::EPowerUpType> OnPowerUpPickedUp;
+		Event<> OnShoot;
 	};
 }

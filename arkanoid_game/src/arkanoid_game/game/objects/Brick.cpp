@@ -5,6 +5,7 @@
 #include "arkanoid_lib/level/BrickTypes.h"
 
 #include "arkanoid_game/game/Game.h"
+#include "arkanoid_game/game/GameSettings.h"
 #include "arkanoid_game/game/objects/Explosion.h"
 #include "arkanoid_game/game/objects/PowerUp.h"
 #include "arkanoid_game/game/PowerUpTypes.h"
@@ -61,15 +62,15 @@ namespace arkanoid::game
 	void Brick::OnDestroyed()
 	{
 		const SDL_FRect collider = GetCollider();
-		game::GetGame().GetWorld().SpawnIGameObject<Explosion>(
+		game::GetGame().GetWorld().SpawnGameObject<Explosion>(
 			collider.x + collider.w * 0.5f,
 			collider.y + collider.h * 0.5f
 		);
 
-		if (utils::Random::RollChance(GetGame().GetPowerUpSpawnChance()))
+		if (utils::Random::RollChance(POWER_UP_SPAWN_CHANCE))
 		{
-			game::GetGame().GetWorld().SpawnIGameObject<PowerUp>(
-				EPowerUpType::ONE_UP,
+			game::GetGame().GetWorld().SpawnGameObject<PowerUp>(
+				static_cast<EPowerUpType>(utils::Random::RandomInt(0, static_cast<int>(MAX_POWER_UP))),
 				collider.x + collider.w * 0.5f,
 				collider.y + collider.h * 0.5f
 			);

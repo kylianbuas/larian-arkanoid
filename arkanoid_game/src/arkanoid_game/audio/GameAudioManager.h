@@ -24,6 +24,8 @@ namespace arkanoid::audio
 		void Snd_OnLifeAdded();
 		void Snd_OnGameOver();
 		void Snd_OnLevelComplete();
+		void Snd_OnPowerUpPickedUp();
+		void Snd_OnShoot();
 
 		resources::Sound* m_pBallHitSound = nullptr; // Not owned.
 		resources::Sound* m_pBallHitBrick = nullptr; // Not owned.
@@ -31,6 +33,8 @@ namespace arkanoid::audio
 		resources::Sound* m_pLifeAddedSound = nullptr; // Not owned.
 		resources::Sound* m_pGameOverSound = nullptr; // Not owned.
 		resources::Sound* m_pLevelCompleteSound = nullptr; // Not owned.
+		resources::Sound* m_pPowerUpPickedUpSound = nullptr; // Not owned.
+		resources::Sound* m_pShootSound = nullptr; // Not owned.
 
 		audio::AudioSystem& m_AudioSystem;
 	};

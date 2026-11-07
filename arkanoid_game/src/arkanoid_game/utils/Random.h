@@ -8,6 +8,7 @@ namespace arkanoid::utils
     {
     public:
         static bool RollChance(float a_fChance);
+		static int RandomInt(int a_iMin, int a_iMax);
 
     private:
         static std::mt19937 m_RandomEngine;

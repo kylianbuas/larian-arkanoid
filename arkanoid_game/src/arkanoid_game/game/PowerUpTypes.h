@@ -7,7 +7,7 @@ namespace arkanoid::game
 	enum class EPowerUpType : uint8_t
 	{
 		ONE_UP = 0,
-		PLACEHOLDER,
+		SHOOTER,
 		PLACEHOLDER_2,
 		PLACEHOLDER_3,
 		PLACEHOLDER_4,

@@ -68,7 +68,7 @@ namespace arkanoid::level
 				continue;
 			}
 
-			brick->Destroy();
+			brick->Destroy(true);
 		}
 
 		m_aBricks.clear();

@@ -137,7 +137,7 @@ namespace arkanoid::game
 			return;
 		}
 
-		std::vector<IBounceable*>& bounceables = game.GetWorld().GetBounceables();
+		const std::vector<IBounceable*>& bounceables = game.GetWorld().GetBounceables();
 		const size_t bounceablesSize = bounceables.size();
 
 		for (int i = static_cast<int>(bounceablesSize) - 1; i >= 0; i--)
@@ -201,7 +201,7 @@ namespace arkanoid::game
 			break;
 		}
 		
-		std::vector<IConsumeable*>& consumeables = game.GetWorld().GetConsumeables();
+		const std::vector<IConsumeable*>& consumeables = game.GetWorld().GetConsumeables();
 		const size_t numConsumeables = consumeables.size();
 		for (int i = static_cast<int>(numConsumeables) - 1; i >= 0; i--)
 		{

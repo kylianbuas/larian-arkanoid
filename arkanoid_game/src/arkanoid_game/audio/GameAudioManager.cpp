@@ -41,6 +41,16 @@ namespace arkanoid::audio
 		{
 			Snd_OnGameOver();
 		};
+
+		game.GetGameEvents().OnPowerUpPickedUp += [this](game::EPowerUpType)
+		{
+			Snd_OnPowerUpPickedUp();
+		};
+
+		game.GetGameEvents().OnShoot += [this]()
+		{
+			Snd_OnShoot();
+		};
 	}
 
 	void GameAudioManager::LoadSounds(resources::ResourceSystem& a_ResourceSystem)
@@ -51,13 +61,17 @@ namespace arkanoid::audio
 		a_ResourceSystem.LoadSound(resources::ESoundType::LIFE_LOST, "snd_life_lost.wav");
 		a_ResourceSystem.LoadSound(resources::ESoundType::GAME_OVER, "snd_game_over.wav");
 		a_ResourceSystem.LoadSound(resources::ESoundType::ADD_LIFE, "snd_add_life.wav");
+		a_ResourceSystem.LoadSound(resources::ESoundType::PICK_UP_POWER_UP, "snd_power_up_pick_up.wav");
+		a_ResourceSystem.LoadSound(resources::ESoundType::SHOOT, "snd_shoot.wav");
 
 		m_pBallHitSound = a_ResourceSystem.GetSound(resources::ESoundType::HIT);
 		m_pBallHitBrick = a_ResourceSystem.GetSound(resources::ESoundType::HIT_BRICK);
-		m_pLevelCompleteSound = a_ResourceSystem.GetSound(resources::ESoundType::LEVEL_COMPLETE);
 		m_pLifeLostSound = a_ResourceSystem.GetSound(resources::ESoundType::LIFE_LOST);
-		m_pGameOverSound = a_ResourceSystem.GetSound(resources::ESoundType::GAME_OVER);
 		m_pLifeAddedSound = a_ResourceSystem.GetSound(resources::ESoundType::ADD_LIFE);
+		m_pGameOverSound = a_ResourceSystem.GetSound(resources::ESoundType::GAME_OVER);
+		m_pLevelCompleteSound = a_ResourceSystem.GetSound(resources::ESoundType::LEVEL_COMPLETE);
+		m_pPowerUpPickedUpSound = a_ResourceSystem.GetSound(resources::ESoundType::PICK_UP_POWER_UP);
+		m_pShootSound = a_ResourceSystem.GetSound(resources::ESoundType::SHOOT);
 	}
 
 	void GameAudioManager::Snd_OnBallHitAnything()
@@ -118,5 +132,25 @@ namespace arkanoid::audio
 		}
 
 		m_AudioSystem.Play(*m_pLevelCompleteSound);
+	}
+
+	void GameAudioManager::Snd_OnPowerUpPickedUp()
+	{
+		if (!m_pPowerUpPickedUpSound)
+		{
+			return;
+		}
+
+		m_AudioSystem.Play(*m_pPowerUpPickedUpSound);
+	}
+
+	void GameAudioManager::Snd_OnShoot()
+	{
+		if (!m_pShootSound)
+		{
+			return;
+		}
+
+		m_AudioSystem.Play(*m_pShootSound);
 	}
 }

@@ -2,7 +2,11 @@
 
 #include <SDL3/SDL_render.h>
 
+#include "arkanoid_lib/level/BrickTypes.h"
+
 #include "arkanoid_game/game/Game.h"
+#include "arkanoid_game/game/GameSettings.h"
+#include "arkanoid_game/game/objects/Laser.h"
 
 namespace arkanoid::game
 {
@@ -35,6 +39,9 @@ namespace arkanoid::game
     {
 		game::GetGame().GetWorld().AddBounceable(*this);
 		m_bIsMoving = false;
+
+		m_fShootingTimer = 0.0f;
+		m_fShootingDelay = 0.0f;
 	}
 
 	SDL_FRect Paddle::GetCollider() const
@@ -73,9 +80,28 @@ namespace arkanoid::game
 
 	void Paddle::Update(float a_fDeltaTime)
 	{
-		m_bIsMoving = false;
-
 		const bool* keyboardState = SDL_GetKeyboardState(nullptr);
+
+		if (m_fShootingTimer > 0.0f)
+		{
+			if (m_fShootingDelay > 0.0f)
+			{
+				m_fShootingDelay -= a_fDeltaTime;
+			}
+			m_fShootingTimer -= a_fDeltaTime;
+
+			if (keyboardState[SDL_SCANCODE_SPACE] && m_fShootingDelay <= 0)
+			{
+				const SDL_FRect collider = GetCollider();
+
+				m_fShootingDelay = SHOOTING_POWER_UP_DELAY;
+				GetGame().GetWorld().SpawnGameObject<Laser>(collider.x + (collider.w / 2), collider.y - level::DUMMY_DEFAULT_HEIGHT);
+
+				GetGame().GetGameEvents().OnShoot();
+			}
+		}
+
+		m_bIsMoving = false;
 
 		if (keyboardState[SDL_SCANCODE_A] || keyboardState[SDL_SCANCODE_LEFT])
 		{
@@ -118,5 +144,11 @@ namespace arkanoid::game
 			SDL_SetRenderDrawColor(&a_Renderer, 255, 0, 0, 255);
 			SDL_RenderFillRect(&a_Renderer, &collider);
 		}
+	}
+
+    void Paddle::ActivateShooting()
+    {
+		m_fShootingTimer = SHOOTING_POWER_UP_TIMER;
+		m_fShootingDelay = 0.0f;
 	}
 }

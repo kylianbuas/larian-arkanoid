@@ -13,8 +13,16 @@ namespace arkanoid::game
 	{
 		m_pPowerUpTexture = game::GetGame().GetResourceSystem().GetTexture(resources::ETextureType::POWER_UP);
 
-		SDL_GetTextureSize(m_pPowerUpTexture, &m_fPowerUpWidth, &m_fPowerUpHeight);
-		m_fPowerUpWidth /= static_cast<float>(EPowerUpType::MAX);
+		if (!SDL_GetTextureSize(m_pPowerUpTexture, &m_fPowerUpWidth, &m_fPowerUpHeight))
+		{
+			const game::Game& game = game::GetGame();
+			m_fPowerUpWidth = game.GetDummyWidth();
+			m_fPowerUpHeight = game.GetDummyHeight();
+		}
+		else
+		{
+			m_fPowerUpWidth /= static_cast<float>(EPowerUpType::MAX);
+		}
 	}
 
 	SDL_FRect PowerUp::GetCollider() const
@@ -44,8 +52,14 @@ namespace arkanoid::game
 				game.AddLife();
 				break;
 			}
+			case EPowerUpType::SHOOTER:
+			{
+				game.GetWorld().GetPaddle().ActivateShooting();
+				break;
+			}
 		}
 
+		game.GetGameEvents().OnPowerUpPickedUp(m_eEPowerUpType);
 		Destroy();
 		return true;
 	}
@@ -78,7 +92,7 @@ namespace arkanoid::game
 		if (m_pPowerUpTexture)
 		{
 			SDL_FRect srcRect = {
-				0.0f,
+				static_cast<float>(static_cast<int>(m_eEPowerUpType) * collider.w),
 				0.0f,
 				m_fPowerUpWidth,
 				m_fPowerUpHeight

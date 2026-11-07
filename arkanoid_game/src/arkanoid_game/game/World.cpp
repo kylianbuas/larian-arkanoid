@@ -21,22 +21,33 @@ namespace arkanoid::game
 	void World::ResetWorld()
 	{
 		m_aBounceables.clear();
+		m_aConsumeables.clear();
+
 		m_pLevel->Clear();
 
 		m_pBall->Reset();
 		m_pPaddle->Reset();
+
+		m_aGameObjects.clear();
 	}
 
 	bool World::Update(float a_fDeltaTime)
 	{
-		std::erase_if(m_aIGameObjects, [](const std::unique_ptr<IGameObject>& IGameObject)
+		std::erase_if(m_aGameObjects, [](const std::unique_ptr<IGameObject>& gameObject)
 		{
-			return IGameObject->IsDestroyed();
+			return gameObject->IsDestroyed();
 		});
 
-		for (const std::unique_ptr<IGameObject>& IGameObject : m_aIGameObjects)
+		const size_t numConsumeables = m_aGameObjects.size();
+		for (int i = static_cast<int>(numConsumeables) - 1; i >= 0; i--)
 		{
-			IGameObject->Update(a_fDeltaTime);
+			std::unique_ptr<IGameObject>& gameObject = m_aGameObjects[i];
+			if (!gameObject)
+			{
+				continue;
+			}
+
+			gameObject->Update(a_fDeltaTime);
 		}
 
 		m_pBall->Update(a_fDeltaTime); // First update the ball. The ball iterates through bounceables.
@@ -53,9 +64,16 @@ namespace arkanoid::game
 		m_pPaddle->Render(a_Renderer);
 		m_pBall->Render(a_Renderer);
 
-		for (const std::unique_ptr<IGameObject>& IGameObject : m_aIGameObjects)
+		const size_t numConsumeables = m_aGameObjects.size();
+		for (int i = static_cast<int>(numConsumeables) - 1; i >= 0; i--)
 		{
-			IGameObject->Render(a_Renderer);
+			const std::unique_ptr<IGameObject>& gameObject = m_aGameObjects[i];
+			if (!gameObject)
+			{
+				continue;
+			}
+
+			gameObject->Render(a_Renderer);
 		}
 	}
 
