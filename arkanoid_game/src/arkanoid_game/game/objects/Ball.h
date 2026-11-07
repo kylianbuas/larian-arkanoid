@@ -46,7 +46,6 @@ namespace arkanoid::game
 		float m_fPosX = 0.0f;
 		float m_fPosY = 0.0f;
 
-		float m_fMovementSpeed = 250.0f;
 		float m_fDirectionX = 0.0f;
 		float m_fDirectionY = 0.0f;
 

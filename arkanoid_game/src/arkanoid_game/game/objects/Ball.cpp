@@ -3,6 +3,7 @@
 #include <SDL3/SDL_render.h>
 
 #include "arkanoid_game/game/Game.h"
+#include "arkanoid_game/game/GameSettings.h"
 #include "arkanoid_game/game/IBounceable.h"
 #include "arkanoid_game/game/IConsumeable.h"
 
@@ -99,8 +100,8 @@ namespace arkanoid::game
 		bool hitAnything = false;
 		IBounceable* hitObject = nullptr;
 
-		m_fPosX += m_fDirectionX * m_fMovementSpeed * a_fDeltaTime;
-		m_fPosY += m_fDirectionY * m_fMovementSpeed * a_fDeltaTime;
+		m_fPosX += m_fDirectionX * BALL_MOVEMENT_SPEED * a_fDeltaTime;
+		m_fPosY += m_fDirectionY * BALL_MOVEMENT_SPEED * a_fDeltaTime;
 
 		const float gameWidth = game.GetGameWidth();
 		if (m_fPosX <= 0.0f)

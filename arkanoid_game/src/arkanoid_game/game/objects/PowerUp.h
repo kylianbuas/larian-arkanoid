@@ -17,8 +17,6 @@ namespace arkanoid::game
 {
 	enum class EPowerUpType : uint8_t;
 
-	constexpr float POWER_UP_FALL_SPEED = 0.025f;
-
 	class PowerUp : public IGameObject, public IConsumeable
 	{
 	public:

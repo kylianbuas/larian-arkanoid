@@ -3,6 +3,7 @@
 #include <SDL3/SDL_render.h>
 
 #include "arkanoid_game/game/Game.h"
+#include "arkanoid_game/game/GameSettings.h"
 #include "arkanoid_game/game/PowerUpTypes.h"
 
 namespace arkanoid::game
@@ -51,7 +52,7 @@ namespace arkanoid::game
 
 	void PowerUp::Update(float a_fDeltaTime)
 	{
-		m_fPosY += POWER_UP_FALL_SPEED;
+		m_fPosY += (POWER_UP_FALL_SPEED * a_fDeltaTime);
 
 		if (!m_bCanConsume)
 		{

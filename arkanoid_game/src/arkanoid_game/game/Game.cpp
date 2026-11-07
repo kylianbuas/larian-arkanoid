@@ -9,6 +9,8 @@
 #include "arkanoid_lib/resources/ResourceSystem.h"
 #include "arkanoid_lib/level/BrickTypes.h"
 
+#include "arkanoid_game/game/GameSettings.h"
+
 namespace arkanoid::game
 {
 	Game::Game(SDL_Window& a_Window, SDL_Renderer& a_Renderer) :
@@ -190,10 +192,9 @@ namespace arkanoid::game
 		return m_World;
 	}
 
-	constexpr int MAX_LIVES = 3;
 	void Game::ResetLives()
 	{
-		m_iLives = MAX_LIVES;
+		m_iLives = STARTING_LIVES;
 	}
 
 	void Game::LoseLife()

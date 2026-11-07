@@ -12,9 +12,7 @@
 namespace arkanoid::editor
 {
 	constexpr int NUM_PALETTE_COLUMNS = 3;
-
 	constexpr int NUM_BRICK_TYPES = static_cast<int>(level::EBrickType::MAX) + 1;
-
 	constexpr int NUM_CONTROL_LINES = 7;
 
 	const std::vector<COMDLG_FILTERSPEC> kLevelFilters =
