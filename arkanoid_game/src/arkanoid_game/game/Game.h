@@ -5,14 +5,15 @@
 #include <cstdint>
 #include <string>
 
-#include "arkanoid_lib/audio/AudioSystem.h"
-#include "arkanoid_lib/game/Ball.h"
-#include "arkanoid_lib/game/Paddle.h"
-#include "arkanoid_lib/game/World.h"
-#include "arkanoid_lib/level/Level.h"
-#include "arkanoid_lib/level/LevelManager.h"
 #include "arkanoid_lib/resources/ResourceSystem.h"
 #include "arkanoid_lib/text/TextSystem.h"
+
+#include "arkanoid_game/audio/AudioSystem.h"
+#include "arkanoid_game/game/Ball.h"
+#include "arkanoid_game/game/Paddle.h"
+#include "arkanoid_game/game/World.h"
+#include "arkanoid_game/level/Level.h"
+#include "arkanoid_game/level/LevelManager.h"
 
 struct SDL_Window;
 struct SDL_Renderer;

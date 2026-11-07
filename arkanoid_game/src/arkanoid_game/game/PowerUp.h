@@ -2,8 +2,8 @@
 
 #include <cstdint>
 
-#include "arkanoid_lib/game/IConsumeable.h"
-#include "arkanoid_lib/game/GameObject.h"
+#include "arkanoid_game/game/IConsumeable.h"
+#include "arkanoid_game/game/GameObject.h"
 
 struct SDL_Renderer;
 struct SDL_Texture;

@@ -4,6 +4,11 @@
 
 namespace arkanoid::level
 {
+	// These are used for measuring the game.
+	// Logic, size of textures and their positioning inside the game world are dependent on this.
+	constexpr float DUMMY_DEFAULT_WIDTH = 16;
+	constexpr float DUMMY_DEFAULT_HEIGHT = 8;
+
 	enum class EBrickType : uint8_t
 	{
 		EMPTY = 0,

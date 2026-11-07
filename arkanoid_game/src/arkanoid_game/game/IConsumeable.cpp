@@ -1,6 +1,6 @@
 #include "./IConsumeable.h"
 
-#include "arkanoid_lib/game/Game.h"
+#include "arkanoid_game/game/Game.h"
 
 namespace arkanoid::game
 {

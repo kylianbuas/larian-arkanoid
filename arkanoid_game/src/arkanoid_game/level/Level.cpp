@@ -2,10 +2,11 @@
 
 #include <SDL3/SDL_render.h>
 
-#include "arkanoid_lib/game/Game.h"
 #include "arkanoid_lib/level/BrickTypes.h"
 #include "arkanoid_lib/level/LevelData.h"
 #include "arkanoid_lib/resources/ResourceSystem.h"
+
+#include "arkanoid_game/game/Game.h"
 
 namespace arkanoid::level
 {

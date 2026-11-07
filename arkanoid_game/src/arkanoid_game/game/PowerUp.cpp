@@ -2,8 +2,8 @@
 
 #include <SDL3/SDL_render.h>
 
-#include "arkanoid_lib/game/Game.h"
-#include "arkanoid_lib/game/PowerUpTypes.h"
+#include "arkanoid_game/game/Game.h"
+#include "arkanoid_game/game/PowerUpTypes.h"
 
 namespace arkanoid::game
 {

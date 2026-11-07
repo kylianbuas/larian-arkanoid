@@ -1,7 +1,8 @@
 #include "./LevelManager.h"
 
-#include "arkanoid_lib/level/Level.h"
 #include "arkanoid_lib/resources/ResourceSystem.h"
+
+#include "arkanoid_game/level/Level.h"
 
 namespace arkanoid::level
 {

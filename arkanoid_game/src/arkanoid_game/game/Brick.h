@@ -2,8 +2,8 @@
 
 #include <cstdint>
 
-#include "arkanoid_lib/game/GameObject.h"
-#include "arkanoid_lib/game/IBounceable.h"
+#include "arkanoid_game/game/GameObject.h"
+#include "arkanoid_game/game/IBounceable.h"
 
 struct SDL_Renderer;
 struct SDL_Texture;
@@ -18,10 +18,7 @@ namespace arkanoid::level
 	enum class EBrickType : uint8_t;
 }
 namespace arkanoid::game
-{
-	constexpr float DUMMY_DEFAULT_WIDTH = 16;
-	constexpr float DUMMY_DEFAULT_HEIGHT = 8;
-
+{;
 	class Brick : public GameObject, public IBounceable
 	{
 	public:

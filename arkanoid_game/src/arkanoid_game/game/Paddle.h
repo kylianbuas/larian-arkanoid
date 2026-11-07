@@ -2,8 +2,8 @@
 
 #include <SDL3/SDL_rect.h>
 
-#include "arkanoid_lib/game/GameObject.h"
-#include "arkanoid_lib/game/IBounceable.h"
+#include "arkanoid_game/game/GameObject.h"
+#include "arkanoid_game/game/IBounceable.h"
 
 struct SDL_Renderer;
 struct SDL_Texture;

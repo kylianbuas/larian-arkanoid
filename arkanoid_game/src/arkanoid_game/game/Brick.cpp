@@ -2,12 +2,13 @@
 
 #include <SDL3/SDL_render.h>
 
-#include "arkanoid_lib/game/Explosion.h"
-#include "arkanoid_lib/game/Game.h"
-#include "arkanoid_lib/game/PowerUp.h"
-#include "arkanoid_lib/game/PowerUpTypes.h"
 #include "arkanoid_lib/level/BrickTypes.h"
-#include "arkanoid_lib/utils/Random.h"
+
+#include "arkanoid_game/game/Explosion.h"
+#include "arkanoid_game/game/Game.h"
+#include "arkanoid_game/game/PowerUp.h"
+#include "arkanoid_game/game/PowerUpTypes.h"
+#include "arkanoid_game/utils/Random.h"
 
 namespace arkanoid::game
 {

@@ -5,37 +5,34 @@
 #include <string>
 #include <vector>
 
+#include "arkanoid_lib/level/BrickTypes.h"
 #include "arkanoid_lib/level/LevelData.h"
 #include "arkanoid_level_editor/windows/WinFile.h"
-#include "arkanoid_lib/game/Brick.h"
 
 namespace arkanoid::editor
 {
-	namespace
+	constexpr int NUM_PALETTE_COLUMNS = 3;
+
+	constexpr int NUM_BRICK_TYPES = static_cast<int>(level::EBrickType::MAX) + 1;
+
+	constexpr int NUM_CONTROL_LINES = 7;
+
+	const std::vector<COMDLG_FILTERSPEC> kLevelFilters =
 	{
-		constexpr int NUM_PALETTE_COLUMNS = 3;
+		{ L"Level files (*.lvl)", L"*.lvl" },
+		{ L"All files (*.*)", L"*.*" },
+	};
 
-		constexpr int NUM_BRICK_TYPES = static_cast<int>(level::EBrickType::MAX) + 1;
-
-		constexpr int NUM_CONTROL_LINES = 7;
-
-		const std::vector<COMDLG_FILTERSPEC> kLevelFilters =
-		{
-			{ L"Level files (*.lvl)", L"*.lvl" },
-			{ L"All files (*.*)", L"*.*" },
-		};
-
-		constexpr const char* CONTROLS[NUM_CONTROL_LINES] =
-		{
-			"WASD: MOVE GRID",
-			"ARROWS: SELECT BRICK",
-			"ENTER: PLACE",
-			"CTRL+S: SAVE",
-			"CTRL+SHIFT+S: SAVE AS",
-			"CTRL+O: OPEN",
-			"N: CLEAR",
-		};
-	}
+	constexpr const char* CONTROLS[NUM_CONTROL_LINES] =
+	{
+		"WASD: MOVE GRID",
+		"ARROWS: SELECT BRICK",
+		"ENTER: PLACE",
+		"CTRL+S: SAVE",
+		"CTRL+SHIFT+S: SAVE AS",
+		"CTRL+O: OPEN",
+		"N: CLEAR",
+	};
 
 	Editor::Editor(SDL_Window& a_Window, SDL_Renderer& a_Renderer) :
 		m_Window(a_Window),
@@ -55,8 +52,8 @@ namespace arkanoid::editor
 		SDL_Texture* pDummyTexture = m_ResourceSystem.GetTexture(resources::ETextureType::DUMMY);
 		if (!pDummyTexture || !SDL_GetTextureSize(pDummyTexture, &m_fBrickWidth, &m_fBrickHeight))
 		{
-			m_fBrickWidth = game::DUMMY_DEFAULT_WIDTH;
-			m_fBrickHeight = game::DUMMY_DEFAULT_HEIGHT;
+			m_fBrickWidth = level::DUMMY_DEFAULT_WIDTH;
+			m_fBrickHeight = level::DUMMY_DEFAULT_HEIGHT;
 		}
 
 		m_ResourceSystem.LoadTexture(resources::ETextureType::BRICK, "tex_bricks.png");

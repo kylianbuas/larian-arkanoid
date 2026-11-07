@@ -3,7 +3,7 @@
 #include <memory>
 #include <vector>
 
-#include "arkanoid_lib/game/Brick.h"
+#include "arkanoid_game/game/Brick.h"
 
 struct SDL_Renderer;
 struct SDL_Texture;

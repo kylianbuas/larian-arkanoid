@@ -7,6 +7,7 @@
 
 #include "arkanoid_lib/level/LevelData.h"
 #include "arkanoid_lib/resources/ResourceSystem.h"
+#include "arkanoid_lib/level/BrickTypes.h"
 
 namespace arkanoid::game
 {
@@ -38,8 +39,8 @@ namespace arkanoid::game
 		SDL_Texture* m_pDummyTexture = m_ResourceSystem.GetTexture(resources::ETextureType::DUMMY);
 		if (!m_pDummyTexture || !SDL_GetTextureSize(m_pDummyTexture, &m_fDummyWidth, &m_fDummyHeight))
 		{
-			m_fDummyWidth = DUMMY_DEFAULT_WIDTH;
-			m_fDummyHeight = DUMMY_DEFAULT_HEIGHT;
+			m_fDummyWidth = level::DUMMY_DEFAULT_WIDTH;
+			m_fDummyHeight = level::DUMMY_DEFAULT_HEIGHT;
 		}
 
 		// Not my best work ever, but it ensures that a row will always fit the screen.

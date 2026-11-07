@@ -2,9 +2,9 @@
 
 #include <SDL3/SDL_render.h>
 
-#include "arkanoid_lib/game/Game.h"
-#include "arkanoid_lib/game/IBounceable.h"
-#include "arkanoid_lib/game/IConsumeable.h"
+#include "arkanoid_game/game/Game.h"
+#include "arkanoid_game/game/IBounceable.h"
+#include "arkanoid_game/game/IConsumeable.h"
 
 namespace arkanoid::game
 {

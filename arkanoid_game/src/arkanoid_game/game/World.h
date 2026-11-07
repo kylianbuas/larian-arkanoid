@@ -2,9 +2,9 @@
 
 #include <vector>
 
-#include "arkanoid_lib/game/Ball.h"
-#include "arkanoid_lib/game/Paddle.h"
-#include "arkanoid_lib/level/Level.h"
+#include "arkanoid_game/game/Ball.h"
+#include "arkanoid_game/game/Paddle.h"
+#include "arkanoid_game/level/Level.h"
 
 struct SDL_Renderer;
 
