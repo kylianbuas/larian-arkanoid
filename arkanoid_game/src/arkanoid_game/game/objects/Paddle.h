@@ -2,7 +2,7 @@
 
 #include <SDL3/SDL_rect.h>
 
-#include "arkanoid_game/game/GameObject.h"
+#include "arkanoid_game/game/IGameObject.h"
 #include "arkanoid_game/game/IBounceable.h"
 
 struct SDL_Renderer;
@@ -14,7 +14,7 @@ namespace arkanoid::resources
 }
 namespace arkanoid::game
 {
-	class Paddle : public GameObject, public IBounceable
+	class Paddle : public IGameObject, public IBounceable
 	{
 	public:
 		Paddle();

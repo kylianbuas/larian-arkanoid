@@ -4,15 +4,15 @@
 
 #include "arkanoid_lib/level/BrickTypes.h"
 
-#include "arkanoid_game/game/Explosion.h"
 #include "arkanoid_game/game/Game.h"
-#include "arkanoid_game/game/PowerUp.h"
+#include "arkanoid_game/game/objects/Explosion.h"
+#include "arkanoid_game/game/objects/PowerUp.h"
 #include "arkanoid_game/game/PowerUpTypes.h"
 #include "arkanoid_game/utils/Random.h"
 
 namespace arkanoid::game
 {
-	Brick::Brick(level::EBrickType a_eType, int a_iPosX, int a_iPosY, float a_fBrickWidth, float a_fBrickHeight) : GameObject(a_iPosX, a_iPosY), IBounceable(),
+	Brick::Brick(level::EBrickType a_eType, float a_iPosX, float a_iPosY, float a_fBrickWidth, float a_fBrickHeight) : IGameObject(a_iPosX, a_iPosY), IBounceable(),
 		m_eType(a_eType)
 	{
 		m_fPosX *= a_fBrickWidth;
@@ -31,11 +31,6 @@ namespace arkanoid::game
 		m_pBrickTexture = a_ResourceSystem.GetTexture(resources::ETextureType::BRICK);
 	}
 
-	void Brick::LoadSounds(resources::ResourceSystem& a_ResourceSystem)
-	{
-		m_pHitBrickSound = a_ResourceSystem.GetSound(resources::ESoundType::HIT_BRICK);
-	}
-
 	SDL_FRect Brick::GetCollider() const
 	{
 		return m_rCollider;
@@ -45,10 +40,7 @@ namespace arkanoid::game
 	{
 		TakeDamage(1);
 
-		if (m_pHitBrickSound)
-		{
-			game::GetGame().GetAudioSystem().Play(*m_pHitBrickSound, 1 + ((game::GetGame().GetWorld().GetBall().GetCombo() - 1) * 0.15f));
-		}
+		GetGame().GetGameEvents().OnBallHitBrick(m_eType);
 	}
 
 	void Brick::TakeDamage(uint32_t a_iDamage)
@@ -69,14 +61,14 @@ namespace arkanoid::game
 	void Brick::OnDestroyed()
 	{
 		const SDL_FRect collider = GetCollider();
-		game::GetGame().GetWorld().SpawnGameObject<Explosion>(
+		game::GetGame().GetWorld().SpawnIGameObject<Explosion>(
 			collider.x + collider.w * 0.5f,
 			collider.y + collider.h * 0.5f
 		);
 
 		if (utils::Random::RollChance(GetGame().GetPowerUpSpawnChance()))
 		{
-			game::GetGame().GetWorld().SpawnGameObject<PowerUp>(
+			game::GetGame().GetWorld().SpawnIGameObject<PowerUp>(
 				EPowerUpType::ONE_UP,
 				collider.x + collider.w * 0.5f,
 				collider.y + collider.h * 0.5f

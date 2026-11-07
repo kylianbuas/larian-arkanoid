@@ -2,7 +2,7 @@
 
 #include <cstdint>
 
-#include "arkanoid_game/game/GameObject.h"
+#include "arkanoid_game/game/IGameObject.h"
 
 struct SDL_Renderer;
 struct SDL_Texture;
@@ -18,7 +18,7 @@ namespace arkanoid::level
 }
 namespace arkanoid::game
 {
-	class Explosion : public GameObject
+	class Explosion : public IGameObject
 	{
 	public:
 		Explosion(float a_fPosX, float a_fPosY);

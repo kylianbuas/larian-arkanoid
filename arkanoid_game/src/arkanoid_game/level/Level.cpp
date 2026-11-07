@@ -49,7 +49,7 @@ namespace arkanoid::level
 			const size_t x = i % LEVEL_WIDTH;
 			const size_t y = i / LEVEL_WIDTH;
 
-			m_aBricks.emplace_back(std::make_unique<game::Brick>(brickType, x, y, m_fBrickWidth, m_fBrickHeight));
+			m_aBricks.emplace_back(std::make_unique<game::Brick>(brickType, static_cast<float>(x), static_cast<float>(y), m_fBrickWidth, m_fBrickHeight));
 
 			game::Brick& brick = *m_aBricks.back();
 			brick.LoadTextures(resourceSystem);

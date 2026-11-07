@@ -7,7 +7,7 @@
 
 namespace arkanoid::game
 {
-	PowerUp::PowerUp(EPowerUpType a_eEPowerUpType, float a_fPosX, float a_fPosY) : GameObject(a_fPosX, a_fPosY), IConsumeable(),
+	PowerUp::PowerUp(EPowerUpType a_eEPowerUpType, float a_fPosX, float a_fPosY) : IGameObject(a_fPosX, a_fPosY), IConsumeable(),
 		m_eEPowerUpType(a_eEPowerUpType)
 	{
 		m_pPowerUpTexture = game::GetGame().GetResourceSystem().GetTexture(resources::ETextureType::POWER_UP);

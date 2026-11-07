@@ -12,11 +12,11 @@ namespace arkanoid::resources
 }
 namespace arkanoid::game
 {
-	class GameObject
+	class IGameObject
 	{
 	public:
-		GameObject(float a_fPosX, float a_fPosY);
-		virtual ~GameObject() = default;
+		IGameObject(float a_fPosX, float a_fPosY);
+		virtual ~IGameObject() = default;
 
 		virtual void LoadTextures(resources::ResourceSystem& a_ResourceSystem);
 		virtual void LoadSounds(resources::ResourceSystem& a_ResourceSystem);

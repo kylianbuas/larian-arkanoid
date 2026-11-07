@@ -1,6 +1,6 @@
 #include <SDL3/SDL.h>
 
-#include "arkanoid_lib/game/Game.h"
+#include "arkanoid_game/game/Game.h"
 #include "arkanoid_lib/level/BrickTypes.h"
 
 using namespace arkanoid;

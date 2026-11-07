@@ -9,11 +9,6 @@ namespace arkanoid::game
 		m_pPaddle->LoadTextures(a_ResourceSystem);
 	}
 
-	void World::LoadSounds(resources::ResourceSystem& a_ResourceSystem)
-	{
-		m_pBall->LoadSounds(a_ResourceSystem);
-	}
-
 	void World::Initialize()
 	{
 		m_pLevel = std::make_unique<level::Level>();
@@ -34,14 +29,14 @@ namespace arkanoid::game
 
 	bool World::Update(float a_fDeltaTime)
 	{
-		std::erase_if(m_aGameObjects, [](const std::unique_ptr<GameObject>& gameObject)
+		std::erase_if(m_aIGameObjects, [](const std::unique_ptr<IGameObject>& IGameObject)
 		{
-			return gameObject->IsDestroyed();
+			return IGameObject->IsDestroyed();
 		});
 
-		for (const std::unique_ptr<GameObject>& gameObject : m_aGameObjects)
+		for (const std::unique_ptr<IGameObject>& IGameObject : m_aIGameObjects)
 		{
-			gameObject->Update(a_fDeltaTime);
+			IGameObject->Update(a_fDeltaTime);
 		}
 
 		m_pBall->Update(a_fDeltaTime); // First update the ball. The ball iterates through bounceables.
@@ -58,9 +53,9 @@ namespace arkanoid::game
 		m_pPaddle->Render(a_Renderer);
 		m_pBall->Render(a_Renderer);
 
-		for (const std::unique_ptr<GameObject>& gameObject : m_aGameObjects)
+		for (const std::unique_ptr<IGameObject>& IGameObject : m_aIGameObjects)
 		{
-			gameObject->Render(a_Renderer);
+			IGameObject->Render(a_Renderer);
 		}
 	}
 

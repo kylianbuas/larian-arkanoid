@@ -6,7 +6,7 @@
 
 namespace arkanoid::game
 {
-	Explosion::Explosion(float a_fPosX, float a_fPosY) : GameObject(a_fPosX, a_fPosY)
+	Explosion::Explosion(float a_fPosX, float a_fPosY) : IGameObject(a_fPosX, a_fPosY)
 	{
 		m_pExplosionTexture = game::GetGame().GetResourceSystem().GetTexture(resources::ETextureType::EXPLOSION);
 

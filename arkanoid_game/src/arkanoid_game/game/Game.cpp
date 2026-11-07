@@ -16,7 +16,8 @@ namespace arkanoid::game
 		m_Renderer(a_Renderer),
 		m_ResourceSystem(a_Renderer),
 		m_TextSystem(a_Renderer),
-		m_LevelManager(m_ResourceSystem)
+		m_LevelManager(m_ResourceSystem),
+		m_GameAudioManager(m_AudioSystem)
 	{
 		SDL_Log("Working directory: %s", SDL_GetCurrentDirectory());
 	}
@@ -24,6 +25,7 @@ namespace arkanoid::game
 	void Game::Initialize()
 	{
 		m_World.Initialize();
+		m_GameAudioManager.Initialize();
 	}
 
 	void Game::Start()
@@ -61,19 +63,7 @@ namespace arkanoid::game
 
 	void Game::LoadSounds()
 	{
-		m_ResourceSystem.LoadSound(resources::ESoundType::HIT, "snd_hit.wav");
-		m_ResourceSystem.LoadSound(resources::ESoundType::HIT_BRICK, "snd_hit_brick.wav");
-		m_ResourceSystem.LoadSound(resources::ESoundType::LEVEL_COMPLETE, "snd_level_complete.wav");
-		m_ResourceSystem.LoadSound(resources::ESoundType::LIFE_LOST, "snd_life_lost.wav");
-		m_ResourceSystem.LoadSound(resources::ESoundType::GAME_OVER, "snd_game_over.wav");
-		m_ResourceSystem.LoadSound(resources::ESoundType::ADD_LIFE, "snd_add_life.wav");
-
-		m_pLevelCompleteSound = m_ResourceSystem.GetSound(resources::ESoundType::LEVEL_COMPLETE);
-		m_pLifeLostSound = m_ResourceSystem.GetSound(resources::ESoundType::LIFE_LOST);
-		m_pGameOverSound = m_ResourceSystem.GetSound(resources::ESoundType::GAME_OVER);
-		m_pAddLifeSound = m_ResourceSystem.GetSound(resources::ESoundType::ADD_LIFE);
-
-		m_World.LoadSounds(m_ResourceSystem);
+		m_GameAudioManager.LoadSounds(m_ResourceSystem);
 	}
 
 	void Game::Destroy()
@@ -110,10 +100,7 @@ namespace arkanoid::game
 			m_World.ResetWorld();
 			m_LevelManager.LoadNextLevel(m_World.GetLevel());
 
-			if (m_pLevelCompleteSound)
-			{
-				m_AudioSystem.Play(*m_pLevelCompleteSound);
-			}
+			m_GameEvents.OnLevelComplete();
 		}
 	}
 
@@ -218,14 +205,11 @@ namespace arkanoid::game
 			m_LevelManager.LoadLevel(0, m_World.GetLevel());
 			ResetLives();
 
-			if (m_pGameOverSound)
-			{
-				m_AudioSystem.Play(*m_pGameOverSound);
-			}
+			m_GameEvents.OnGameOver();
 		}
-		else if (m_pLifeLostSound)
+		else
 		{
-			m_AudioSystem.Play(*m_pLifeLostSound);
+			m_GameEvents.OnLifeLost();
 		}
 	}
 
@@ -235,10 +219,17 @@ namespace arkanoid::game
 		{
 			m_iLives++;
 
-			if (m_pAddLifeSound)
-			{
-				m_AudioSystem.Play(*m_pAddLifeSound);
-			}
+			m_GameEvents.OnLifeAdded();
 		}
+	}
+
+	const GameEvents& Game::GetGameEvents() const
+	{
+		return m_GameEvents;
+	}
+
+	GameEvents& Game::GetGameEvents()
+	{
+		return m_GameEvents;
 	}
 }

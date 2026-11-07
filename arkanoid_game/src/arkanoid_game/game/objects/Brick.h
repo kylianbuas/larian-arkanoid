@@ -2,7 +2,7 @@
 
 #include <cstdint>
 
-#include "arkanoid_game/game/GameObject.h"
+#include "arkanoid_game/game/IGameObject.h"
 #include "arkanoid_game/game/IBounceable.h"
 
 struct SDL_Renderer;
@@ -19,14 +19,13 @@ namespace arkanoid::level
 }
 namespace arkanoid::game
 {;
-	class Brick : public GameObject, public IBounceable
+	class Brick : public IGameObject, public IBounceable
 	{
 	public:
-		Brick(level::EBrickType a_eType, int a_iPosX, int a_iPosY, float a_fBrickWidth, float a_fBrickHeight);
+		Brick(level::EBrickType a_eType, float a_iPosX, float a_iPosY, float a_fBrickWidth, float a_fBrickHeight);
 		virtual ~Brick() = default;
 
 		void LoadTextures(resources::ResourceSystem& a_ResourceSystem);
-		void LoadSounds(resources::ResourceSystem& a_ResourceSystem);
 
 		SDL_FRect GetCollider() const override;
 
@@ -50,6 +49,5 @@ namespace arkanoid::game
 		SDL_FRect m_rCollider;
 
 		SDL_Texture* m_pBrickTexture = nullptr; // Not owned.
-		resources::Sound* m_pHitBrickSound = nullptr; // Not owned.
 	};
 }

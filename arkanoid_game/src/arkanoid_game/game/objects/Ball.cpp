@@ -19,11 +19,6 @@ namespace arkanoid::game
 		}
 	}
 
-	void Ball::LoadSounds(resources::ResourceSystem& a_ResourceSystem)
-    {
-		m_pHitSound = a_ResourceSystem.GetSound(resources::ESoundType::HIT);
-    }
-
 	void Ball::Reset()
 	{
 		m_bLaunched = false;
@@ -102,6 +97,7 @@ namespace arkanoid::game
 		}
 
 		bool hitAnything = false;
+		IBounceable* hitObject = nullptr;
 
 		m_fPosX += m_fDirectionX * m_fMovementSpeed * a_fDeltaTime;
 		m_fPosY += m_fDirectionY * m_fMovementSpeed * a_fDeltaTime;
@@ -199,6 +195,7 @@ namespace arkanoid::game
 			bounceable->OnHit();
 
 			hitAnything = true;
+			hitObject = bounceable;
 
 			break;
 		}
@@ -226,9 +223,9 @@ namespace arkanoid::game
 			break;
 		}
 
-		if (hitAnything && m_pHitSound)
+		if (hitAnything)
 		{
-			game::GetGame().GetAudioSystem().Play(*m_pHitSound);
+			game.GetGameEvents().OnBallHitAnything(hitObject);
 		}
 	}
 

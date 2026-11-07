@@ -2,8 +2,8 @@
 
 #include <vector>
 
-#include "arkanoid_game/game/Ball.h"
-#include "arkanoid_game/game/Paddle.h"
+#include "arkanoid_game/game/objects/Ball.h"
+#include "arkanoid_game/game/objects/Paddle.h"
 #include "arkanoid_game/level/Level.h"
 
 struct SDL_Renderer;
@@ -22,7 +22,6 @@ namespace arkanoid::game
 	public:
 		void Initialize();
 		void LoadTextures(resources::ResourceSystem& a_ResourceSystem);
-		void LoadSounds(resources::ResourceSystem& a_ResourceSystem);
 
 		void ResetWorld();
 
@@ -51,9 +50,9 @@ namespace arkanoid::game
 		std::vector<IConsumeable*>& GetConsumeables();
 
 		template<typename T, typename... Args>
-		void SpawnGameObject(Args&&... a_Args)
+		void SpawnIGameObject(Args&&... a_Args)
 		{
-			m_aGameObjects.emplace_back(
+			m_aIGameObjects.emplace_back(
 				std::make_unique<T>(std::forward<Args>(a_Args)...)
 			);
 		}
@@ -65,6 +64,6 @@ namespace arkanoid::game
 		std::vector<IBounceable*> m_aBounceables; // Non-owning.
 		std::vector<IConsumeable*> m_aConsumeables; // Non-owning.
 
-		std::vector<std::unique_ptr<GameObject>> m_aGameObjects; // Owns the objects.
+		std::vector<std::unique_ptr<IGameObject>> m_aIGameObjects; // Owns the objects.
 	};
 }

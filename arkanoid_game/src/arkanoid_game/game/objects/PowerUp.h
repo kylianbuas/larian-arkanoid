@@ -3,7 +3,7 @@
 #include <cstdint>
 
 #include "arkanoid_game/game/IConsumeable.h"
-#include "arkanoid_game/game/GameObject.h"
+#include "arkanoid_game/game/IGameObject.h"
 
 struct SDL_Renderer;
 struct SDL_Texture;
@@ -19,7 +19,7 @@ namespace arkanoid::game
 
 	constexpr float POWER_UP_FALL_SPEED = 0.025f;
 
-	class PowerUp : public GameObject, public IConsumeable
+	class PowerUp : public IGameObject, public IConsumeable
 	{
 	public:
 		PowerUp(EPowerUpType a_eEPowerUpType, float a_fPosX, float a_fPosY);

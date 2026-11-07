@@ -19,7 +19,6 @@ namespace arkanoid::game
 		virtual ~Ball() = default;
 
 		void LoadTextures(resources::ResourceSystem& a_ResourceSystem);
-		void LoadSounds(resources::ResourceSystem& a_ResourceSystem);
 		void Reset();
 
 		void Bounce(float a_fDirectionX, float a_fDirectionY);
@@ -39,7 +38,6 @@ namespace arkanoid::game
 	private:
 		bool m_bLaunched = false;
 
-		resources::Sound* m_pHitSound = nullptr; // Not owned.
 		SDL_Texture* m_pBallTexture = nullptr; // Not owned.
 
 		float m_fBallWidth = 0;

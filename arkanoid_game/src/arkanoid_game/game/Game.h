@@ -9,8 +9,10 @@
 #include "arkanoid_lib/text/TextSystem.h"
 
 #include "arkanoid_game/audio/AudioSystem.h"
-#include "arkanoid_game/game/Ball.h"
-#include "arkanoid_game/game/Paddle.h"
+#include "arkanoid_game/audio/GameAudioManager.h"
+#include "arkanoid_game/game/objects/Ball.h"
+#include "arkanoid_game/game/GameEvents.h"
+#include "arkanoid_game/game/objects/Paddle.h"
 #include "arkanoid_game/game/World.h"
 #include "arkanoid_game/level/Level.h"
 #include "arkanoid_game/level/LevelManager.h"
@@ -69,11 +71,13 @@ namespace arkanoid::game
 		{
 			return m_fPowerUpSpawnChance;
 		}
+
+		const GameEvents& GetGameEvents() const;
+		GameEvents& GetGameEvents();
 	private:
-		resources::Sound* m_pLevelCompleteSound = nullptr; // Not owned.
-		resources::Sound* m_pLifeLostSound = nullptr; // Not owned.
-		resources::Sound* m_pAddLifeSound = nullptr; // Not owned.
-		resources::Sound* m_pGameOverSound = nullptr; // Not owned.
+		GameEvents m_GameEvents;
+		audio::GameAudioManager m_GameAudioManager;
+
 		size_t m_iLives = 0;
 
 		SDL_Window& m_Window;
